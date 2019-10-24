@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 )
 
-type organizationRestServiceRuntimeError interface {
+// OrganizationRestServiceRuntimeError interface for application errors
+type OrganizationRestServiceRuntimeError interface {
 	Error() string
 	ErrorCode() string
 	ErrorMessage() string
@@ -15,19 +16,19 @@ type organizationRestServiceRuntimeError interface {
 
 // Error returns InvalidValidationError message
 type organizationRestServiceRuntimeError struct {
-	errorParams []string
+	errorParams      []string
 	transactionError TransactionError
 }
 
-// NeworganizationRestServiceRuntimeError creates a new error with a transactionerror
-func NewRuntimeError(transactionError TransactionError) organizationRestServiceRuntimeError{
+// NewRuntimeError creates a new error with a transactionerror
+func NewRuntimeError(transactionError TransactionError) OrganizationRestServiceRuntimeError {
 	err := new(organizationRestServiceRuntimeError)
 	err.transactionError = transactionError
 	return err
 }
 
-// NeworganizationRestServiceRuntimeError creates a new error with a transactionerror and an array of params
-func NewRuntimeErrorWithParams(transactionError TransactionError, params []string) organizationRestServiceRuntimeError{
+// NewRuntimeErrorWithParams creates a new error with a transactionerror and an array of params
+func NewRuntimeErrorWithParams(transactionError TransactionError, params []string) OrganizationRestServiceRuntimeError {
 	err := new(organizationRestServiceRuntimeError)
 	err.transactionError = transactionError
 	err.errorParams = params
@@ -60,11 +61,11 @@ func (e *organizationRestServiceRuntimeError) TransactionError() TransactionErro
 }
 
 func (e *organizationRestServiceRuntimeError) MarshalJSON() ([]byte, error) {
-    return json.Marshal(struct {
-        Code     string   `json:"code"`
-        Message  string   `json:"message"`
-    }{
-        Code: e.ErrorCode(),
-        Message:  e.ErrorMessage(),
-    })
+	return json.Marshal(struct {
+		Code    string `json:"code"`
+		Message string `json:"message"`
+	}{
+		Code:    e.ErrorCode(),
+		Message: e.ErrorMessage(),
+	})
 }
