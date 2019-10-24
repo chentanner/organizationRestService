@@ -1,0 +1,163 @@
+openapi: '3.0.2'
+info:
+  title: Commodity Risk Credit Assessment
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /organizations:
+    get:
+      summary: Gets organizations
+      operationId: getOrganizations
+      description: Returns a list of all organizations, supports paging
+      parameters:
+        - in: query
+          name: start
+          description: return limit number of records from the start position
+          schema:
+            type: integer
+        - in: query
+          name: limit
+          description: number of records to return starting from the start position
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/organizationCollection"
+    post:
+      summary: Create an organization
+      operationId: createOrganization
+      requestBody:
+        description: Request body description
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/organization'
+      responses:
+        '201':
+          description: Created
+  /organizations/{id}:
+      get:
+        summary: Gets organization by id
+        operationId: getOrganization
+        description: Returns a single organization, with the id
+        parameters:
+          - in: path
+            name: id
+            description: id of the organization
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/organization"
+                  
+components:
+  schemas:
+    baseObject:
+      type: object
+      properties:
+        expired:
+          type: string
+        versions:
+          type: string
+    baseCollection:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+        count:
+          type: integer
+        start:
+          type: integer
+        limit:
+          type: integer
+        links:
+          type: string
+    organizationCollection:
+      allOf:     # Combines the collection and the inline model
+        - $ref: '#/components/schemas/baseCollection'
+        - type: object
+          properties:
+            items:
+              $ref: "#/components/schemas/organizations"
+    organizations:
+      type: array
+      items:
+        $ref: "#/components/schemas/organization"
+    organization:
+      allOf:     # Combines the address and the inline model
+        - $ref: '#/components/schemas/address'
+        - $ref: '#/components/schemas/baseObject'
+        - type: object
+          properties:
+            ID:
+              type: integer
+            name:
+              type: string
+            legalName:
+              type: string
+            legalEntityIdentifier:
+              type: string
+            cftcInterimCompliantIdentifier:
+              type: string
+            xRefCode:
+              type: string
+            xRefCode2:
+              type: string
+    counterparty:
+      type: object
+      properties:
+        creditDefaultProbability:
+          type: number
+          format: double
+        industryCode:
+          type: string
+        spRatingCode:
+          type: string
+        moodyRatingCode:
+          type: string
+        internalRatingCode:
+          type: string
+        holidayCode:
+          type: string
+        comments:
+          type: string
+        lastCreditAssessmentDate:
+          type: string
+    company:
+      type: object
+      properties:
+        confirmCloseText:
+          type: string
+        nearestSettleDayRule:
+          type: string
+        defaultMtmCurrencyConversionDateRule:
+          type: string
+        comments:
+          type: string
+    address:
+      type: object
+      properties:
+        suite:
+          type: string
+        streetAddress:
+          type: string
+        city:
+          type: string
+        provState:
+          type: string
+        postalCode:
+          type: string
+        countryCode:
+          type: string
