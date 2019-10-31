@@ -1,9 +1,9 @@
 package stores
 
 import (
-	"organizationRestService/models"
 	"errors"
 	"fmt"
+	"organizationRestService/models"
 
 	"github.com/jinzhu/gorm"
 )

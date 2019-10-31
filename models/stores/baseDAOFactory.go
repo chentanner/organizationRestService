@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"organizationRestService/models/stores/adapters"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
@@ -23,13 +25,19 @@ func CreatePostgresDBConnection(dbHost string, dbPort string, username string, p
 
 // NewPostgresqlConnection creates a new handle to the DB object using .env variables
 func NewPostgresqlConnection() *gorm.DB {
+	connectionAdapter := os.Getenv("db_connection_adapter")
 	username := os.Getenv("db_user")
 	password := os.Getenv("db_pass")
 	dbName := os.Getenv("db_name")
 	dbHost := os.Getenv("db_host")
 	dbPort := os.Getenv("db_port")
 
-	return CreatePostgresDBConnection(dbHost, dbPort, username, password, dbName) //Build connection string
+	if connectionAdapter == "gcp" {
+		// Connect using Google Cloud Platform Postgres SQL service
+		return adapters.CreatePostgresDBConnection(dbHost, dbPort, username, password, dbName)
+	} else {
+		return CreatePostgresDBConnection(dbHost, dbPort, username, password, dbName) //Build connection string
+	}
 }
 
 func GetDAO(daoType string) *gorm.DB {

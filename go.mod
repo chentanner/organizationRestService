@@ -3,6 +3,7 @@ module organizationRestService
 go 1.12
 
 require (
+	github.com/GoogleCloudPlatform/cloudsql-proxy v0.0.0-20191017031552-46c5533ff5ba
 	github.com/deepmap/oapi-codegen v1.3.0
 	github.com/getkin/kin-openapi v0.2.0
 	github.com/go-playground/locales v0.12.1 // indirect

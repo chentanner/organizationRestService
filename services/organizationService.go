@@ -1,12 +1,12 @@
 package services
 
 import (
+	"fmt"
 	"organizationRestService/api/assemblers"
 	api "organizationRestService/api/gen"
 	"organizationRestService/appErrors"
 	"organizationRestService/models"
 	"organizationRestService/models/stores"
-	"fmt"
 )
 
 //OrganizationServiceInterface interface for service
